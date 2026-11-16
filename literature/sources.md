@@ -75,7 +75,14 @@ https://doi.org/10.1145/2980179.2982434
 - **Ідея:** метод рендерингу шляхів на GPU на основі scanline-растеризації, яку традиційно вважали непридатною для GPU, зі стабільним прискоренням на анімованих сценах.
 - **Користь:** порівняння з попередніми методами дає готову таблицю підходів і метрик для огляду.
 
-### [10] Levien R., Uguray A. GPU-friendly Stroke Expansion. *Proceedings of the ACM on Computer Graphics and Interactive Techniques*, 7(3), 2024 (HPG 2024).
+### [10] Kulkarni B., Whiting H., Panchekha P. Semantics for 2D Rasterization. 2026.
+https://doi.org/10.1145/3839471
+
+- **Шар:** нове
+- **Ідея:** формальна семантика μSkia для 2D-бібліотеки Skia, механізована в Lean (стан полотна, стек шарів, змішування, кольорові фільтри). На її основі побудовано оптимізатор, який на 99 програмах Skia, зібраних з топ-100 вебсайтів, дає прискорення на 18,7% порівняно з сучасним GPU-бекендом Skia.
+- **Користь:** Skia тут є об'єктом дослідження, а не фоном, тож джерело дає строгий опис того, що саме Skia робить під час малювання. Навантаження взято з браузера, а не з Flutter, тому переносити цифри на Flutter не можна.
+
+### [11] Levien R., Uguray A. GPU-friendly Stroke Expansion. *Proceedings of the ACM on Computer Graphics and Interactive Techniques*, 7(3), 2024 (HPG 2024).
 https://doi.org/10.1145/3675390 · препринт: https://arxiv.org/abs/2405.00127
 
 - **Шар:** нове
@@ -86,53 +93,67 @@ https://doi.org/10.1145/3675390 · препринт: https://arxiv.org/abs/2405.
 
 ## 3. Компіляція шейдерів
 
-### [11] Donaldson A. F., Evrard H., Lascu A., Thomson P. Automated testing of graphics shader compilers. *Proceedings of the ACM on Programming Languages*, 1(OOPSLA), Article 93, 2017.
+### [12] Donaldson A. F., Evrard H., Lascu A., Thomson P. Automated testing of graphics shader compilers. *Proceedings of the ACM on Programming Languages*, 1(OOPSLA), Article 93, 2017.
 https://doi.org/10.1145/3133917
 
 - **Шар:** нове
 - **Ідея:** автоматизоване тестування шейдерних компіляторів у драйверах різних виробників, яке виявило в них численні дефекти.
 - **Користь:** пояснює, чому компіляція шейдерів у драйвері на пристрої є ненадійною ланкою і чому рушії прагнуть контролювати її заздалегідь.
 
-### [12] Crawford L., O'Boyle M. A Cross-platform Evaluation of Graphics Shader Compiler Optimization. *Proc. IEEE ISPASS*, 219–228, 2018.
+### [13] Crawford L., O'Boyle M. A Cross-platform Evaluation of Graphics Shader Compiler Optimization. *Proc. IEEE ISPASS*, 219–228, 2018.
 https://www.semanticscholar.org/paper/A-Cross-platform-Evaluation-of-Graphics-Shader-Crawford-O'Boyle/4dcc28978cd7806538846ed65d20d0ecbb4f2511
 
 - **Шар:** нове
 - **Ідея:** вплив типових оптимізацій оцінено на шейдерах GFXBench 4.0 на трьох настільних і двох мобільних GPU; ефект буває і позитивним, і негативним залежно від оптимізації та платформи.
 - **Користь:** приклад методології вимірювань на мобільних GPU і доказ того, що поведінка шейдерів залежить від платформи.
 
-### [13] He Y., Fatahalian K., Foley T. Slang: language mechanisms for extensible real-time shading systems. *ACM Transactions on Graphics*, 37(4), 2018.
+### [14] He Y., Fatahalian K., Foley T. Slang: language mechanisms for extensible real-time shading systems. *ACM Transactions on Graphics*, 37(4), 2018.
 https://research.nvidia.com/publication/2018-08_slang-language-mechanisms-extensible-real-time-shading-systems
 
 - **Шар:** нове
 - **Ідея:** розширення HLSL, з яким шейдерна система рендерера стає простішою й дає вищу продуктивність, ніж початкова реалізація.
 - **Користь:** описує проблему варіантів шейдерів і їх спеціалізації під час компіляції; це та сама проблема, яку Impeller вирішує фіксованим набором шейдерів.
 
+### [15] He Y., Foley T., Hofstee T., Long H., Fatahalian K. Shader Components: Modular and High Performance Shader Development. *ACM Transactions on Graphics*, 36(4), 2017 (SIGGRAPH 2017).
+https://doi.org/10.1145/3072959.3073648
+
+- **Шар:** нове
+- **Ідея:** шейдерні компоненти об'єднують шматок шейдерної логіки з параметрами, потрібними під час прив'язування. Це зберігає статичну спеціалізацію шейдерів і дрібне оновлення параметрів у сучасних API без втрати модульності коду.
+- **Користь:** стосується того, як організувати набір шейдерів і їхніх варіантів, а не затримок компіляції напряму, тому це непряма опора для порівняння «набір шейдерів, зібраний заздалегідь» проти «компіляція під час роботи».
+
+### [16] Park J. et al. Flexible Uber Fetch Shader Architecture for Fluid Gaming Experience. *Proc. IEEE ICCE*, 2025.
+https://doi.org/10.1109/ICCE63647.2025.10929974 · https://ieeexplore.ieee.org/document/10929974
+
+- **Шар:** нове
+- **Ідея:** мікрозатримки (micro-stutter) у мобільних іграх виникають через пізнє прив'язування ресурсів. У Vulkan Graphics Pipeline Library етапи шейдерів можна компілювати під час завантаження й кешувати, але компілятор мусить додавати довгу послідовність Uber Fetch Shader. Запропонований програмно-апаратний інтерфейс вершинного вводу зменшує накладні витрати на компіляцію на 16,68% і кількість компіляцій на 13,5%.
+- **Користь:** найближча з знайдених робіт про зв'язок попередньої компіляції pipeline-станів і stutter на мобільних GPU. Це ігри на GPU певної архітектури, а не UI-фреймворк, тож це аналогія, а не пряме підтвердження.
+
 ---
 
 ## 4. Графічні API та мобільні GPU
 
-### [14] Molnar S., Cox M., Ellsworth D., Fuchs H. A sorting classification of parallel rendering. *IEEE Computer Graphics and Applications*, 14(4), 23–32, 1994.
+### [17] Molnar S., Cox M., Ellsworth D., Fuchs H. A sorting classification of parallel rendering. *IEEE Computer Graphics and Applications*, 14(4), 23–32, 1994.
 https://dl.acm.org/doi/10.1109/38.291528
 
 - **Шар:** фундаментальне
 - **Ідея:** класифікація паралельного рендерингу за тим, де відбувається сортування з об'єктних координат в екранні; розбір трьох класів алгоритмів і їхніх витрат.
 - **Користь:** теоретична основа tile-based рендерингу, який використовують мобільні GPU.
 
-### [15] Akenine-Möller T., Ström J. Graphics processing units for handhelds. *Proceedings of the IEEE*, 96(5), 779–789, 2008.
+### [18] Akenine-Möller T., Ström J. Graphics processing units for handhelds. *Proceedings of the IEEE*, 96(5), 779–789, 2008.
 https://fileadmin.cs.lth.se/graphics/research/papers/2008/GPUhandheld/GPU_handheld.pdf
 
 - **Шар:** фундаментальне
 - **Ідея:** огляд проєктування мобільних GPU, де пріоритетом часто є енергоспоживання, а не продуктивність, з оглядом API для дво- і тривимірної графіки на мобільних пристроях.
 - **Користь:** найкращий вступ у відмінності мобільних GPU від настільних для розділу про графічні API.
 
-### [16] Gambhir M., Panda S., Basha S. J. Vulkan rendering framework for mobile multimedia. *SIGGRAPH Asia 2018 Posters*, Article 64, 2018.
+### [19] Gambhir M., Panda S., Basha S. J. Vulkan rendering framework for mobile multimedia. *SIGGRAPH Asia 2018 Posters*, Article 64, 2018.
 https://doi.org/10.1145/3283289.3283336
 
 - **Шар:** нове (постер на 2 сторінки, тож як джерело він слабший за повну статтю)
 - **Ідея:** перший рушій анімацій та ефектів на Vulkan для мобільного відео; відтворення 4K при 30 FPS з 30% меншим споживанням пам'яті та 20% меншим енергоспоживанням.
 - **Користь:** рідкісний приклад оцінки Vulkan саме для 2D-навантаження на телефонах.
 
-### [17] Lujan M., McCrary M., Ford B. W., Zong Z. Vulkan vs OpenGL ES: Performance and Energy Efficiency Comparison on the big.LITTLE Architecture. *Proc. IEEE NAS*, 1–8, 2021.
+### [20] Lujan M., McCrary M., Ford B. W., Zong Z. Vulkan vs OpenGL ES: Performance and Energy Efficiency Comparison on the big.LITTLE Architecture. *Proc. IEEE NAS*, 1–8, 2021.
 https://www.computer.org/csdl/proceedings-article/nas/2021/09605447/1yJYbhAkePK
 
 - **Шар:** нове
@@ -143,47 +164,59 @@ https://www.computer.org/csdl/proceedings-article/nas/2021/09605447/1yJYbhAkePK
 
 ## 5. Вимірювання продуктивності UI
 
-### [18] Liu Y., Xu C., Cheung S.-C. Characterizing and detecting performance bugs for smartphone applications. *Proc. ICSE*, 1013–1024, 2014.
+### [21] Liu Y., Xu C., Cheung S.-C. Characterizing and detecting performance bugs for smartphone applications. *Proc. ICSE*, 1013–1024, 2014.
 https://doi.org/10.1145/2568225.2568229
 
 - **Шар:** фундаментальне
 - **Ідея:** дослідження 70 реальних дефектів продуктивності з восьми великих Android-застосунків. Найпоширенішим типом виявилося «гальмування» інтерфейсу (75,7%).
 - **Користь:** обґрунтовує актуальність теми: плавність UI є головною проблемою продуктивності мобільних застосунків.
 
-### [19] Wu Y., Du D., Xu C., Xia Y., Fu M., Zang B., Chen H. D-VSync: Decoupled Rendering and Displaying for Smartphone Graphics. *Proc. ASPLOS*, 2025.
+### [22] Wu Y., Du D., Xu C., Xia Y., Fu M., Zang B., Chen H. D-VSync: Decoupled Rendering and Displaying for Smartphone Graphics. *Proc. ASPLOS*, 2025.
 https://doi.org/10.1145/3669940.3707235
 
 - **Шар:** нове
 - **Ідея:** архітектура, що відокремлює виконання рендерингу від показу кадру; порівняно з VSync у середньому зменшує кількість пропущених кадрів на 72,7%, а помітних користувачу ривків на 72,3%.
 - **Користь:** строгі означення пропущеного кадру, ривка й затримки рендерингу та зразок експерименту на реальних смартфонах.
 
-### [20] Lin Z., Zhou M., Sun B., Hu H., Fan G., Li L. Phantom Rendering Detection: Identifying and Analyzing Unnecessary UI Computations. Proceedings of the ACM on Software Engineering, 3(FSE), Article FSE073, 1628–1649, 2026.
+### [23] Lin Z., Zhou M., Sun B., Hu H., Fan G., Li L. Phantom Rendering Detection: Identifying and Analyzing Unnecessary UI Computations. Proceedings of the ACM on Software Engineering, 3(FSE), Article FSE073, 1628–1649, 2026.
 https://doi.org/10.1145/3797101
 
-- **Примітка:** рік і назву видання треба уточнити за DOI.
 - **Шар:** нове
 - **Ідея:** клас проблем, коли застосунок виконує зайві позаекранні UI-обчислення, властивий двопотоковим архітектурам рендерингу; у реальних застосунках це до 40% змарнованих ресурсів CPU.
 - **Користь:** аналізує ту саму двопотокову модель (UI-потік і потік рендерингу), що й у Flutter.
+
+### [24] Georges A., Buytaert D., Eeckhout L. Statistically Rigorous Java Performance Evaluation. *Proc. OOPSLA*, 57–76, 2007.
+https://doi.org/10.1145/1297027.1297033
+
+- **Шар:** фундаментальне
+- **Ідея:** поширені способи вимірювання продуктивності вводять в оману через недетермінованість запусків. Автори пропонують статистичний аналіз (зокрема 95% довірчі інтервали), а також окремо оцінювати продуктивність під час старту й у сталому режимі. У прикладі порівняння збирачів сміття метод «найкращого з запусків» показує однакову продуктивність, а статистичний аналіз виявляє значну різницю.
+- **Користь:** обґрунтовує кількість повторів, довірчі інтервали та поділ на холодний і теплий запуски. Останнє прямо стосується першого кадру з компіляцією шейдерів. Стаття про Java, тож переноситься методика, а не результати.
+
+### [25] Liu W., Lin F., Guo L., Chen T.-H., Hassan A. E. GUIWatcher: Automatically Detecting GUI Lags by Analyzing Mobile Application Screencasts. *Proc. ICSE-SEIP*, 2025.
+https://doi.org/10.1109/ICSE-SEIP66354.2025.00010
+- **Шар:** нове
+- **Ідея:** інструмент виявляє лаги інтерфейсу за записом екрана за допомогою комп'ютерного зору, без втручання в застосунок. Три типи лагів визначаються за порогами з досліджень HCI, а серйозність оцінюється за тривалістю проблемних кадрів. Середня точність 0,91, повнота 0,96.
+- **Користь:** альтернативний, зовнішній спосіб міряти лаги на реальних телефонах. Може доповнити вбудований профайлер Flutter незалежною перевіркою.
 
 ---
 
 ## 6. Порівняння рушіїв і кросплатформних фреймворків
 
-### [21] Biørn-Hansen A., Grønli T.-M., Ghinea G. Animations in Cross-Platform Mobile Applications: An Evaluation of Tools, Metrics and Performance. *Sensors*, 19(9), 2081, 2019.
+### [26] Biørn-Hansen A., Grønli T.-M., Ghinea G. Animations in Cross-Platform Mobile Applications: An Evaluation of Tools, Metrics and Performance. *Sensors*, 19(9), 2081, 2019.
 https://doi.org/10.3390/s19092081
 
 - **Шар:** нове
 - **Ідея:** три анімаційні сценарії виміряно кількома профайлерами за метриками FPS, використання CPU, пам'яті та пам'яті GPU; виявлено суттєві відмінності між кросплатформними технологіями та між Android і iOS.
 - **Користь:** найближча за методологією робота: готовий приклад сценаріїв, метрик та інструментів для експерименту.
 
-### [22] Biørn-Hansen A., Rieger C., Grønli T.-M., Majchrzak T. A., Ghinea G. An empirical investigation of performance overhead in cross-platform mobile development frameworks. *Empirical Software Engineering*, 25(4), 2997–3040, 2020.
+### [27] Biørn-Hansen A., Rieger C., Grønli T.-M., Majchrzak T. A., Ghinea G. An empirical investigation of performance overhead in cross-platform mobile development frameworks. *Empirical Software Engineering*, 25(4), 2997–3040, 2020.
 https://doi.org/10.1007/s10664-020-09827-6
 
 - **Шар:** нове
 - **Ідея:** бенчмарк накладних витрат «мосту» між кросплатформним кодом і системою на Android для п'яти фреймворків порівняно з нативним застосунком; кросплатформні фреймворки можуть знижувати продуктивність.
 - **Користь:** зразок строгого дизайну експерименту й статистичної обробки в рецензованому журналі.
 
-### Markowski M., Smołka J. A comparative analysis of the Flutter and React Native frameworks. Journal of Computer Sciences Institute, 29, 346–351, 2023.
+### [28] Markowski M., Smołka J. A comparative analysis of the Flutter and React Native frameworks. Journal of Computer Sciences Institute, 29, 346–351, 2023.
 https://doi.org/10.35784/jcsi.3794
 
 - **Шар:** нове
@@ -195,16 +228,18 @@ https://doi.org/10.35784/jcsi.3794
 ## Прогалини, які може закрити курсова
 
 1. **Рецензованих порівнянь Skia та Impeller не знайдено.** Пошук дав лише блоги й технічні матеріали, тож виміри на реальних пристроях будуть новим внеском.
-2. **Дослідження шейдерів не вивчають затримку компіляції під час роботи UI.** Роботи [11]–[13] стосуються якості коду, коректності компіляторів і архітектури шейдерних систем, а не jank першого кадру.
-3. **Порівняння фреймворків розглядають Flutter як «чорну скриньку».** У [21]–[23] міряють середній FPS, CPU і пам'ять, без поділу на UI- та raster-потоки й без перцентилів часу кадру.
-4. **Vulkan і OpenGL ES порівнюють переважно на 3D-навантаженнях.** Для 2D UI є хіба що постер [16], а порівнянь з Metal не знайдено.
-5. **Jank досліджують на рівні ОС** ([19], [20]), а не у фреймворках з власним рушієм рендерингу.
+2. **Дослідження шейдерів не вивчають затримку компіляції під час роботи UI.** Роботи [12]–[14] стосуються якості коду, коректності компіляторів і архітектури шейдерних систем, а не jank першого кадру. Найближчі за темою [15] і [16] працюють з модульними шейдерами та попередньою компіляцією pipeline-станів у мобільних іграх. Пошук не знайшов академічних робіт, які б прямо вимірювали stutter від компіляції в UI-фреймворках, тож такі виміри Skia проти Impeller будуть внеском курсової. Про сам механізм stutter знайшлися лише практичні матеріали (блоги, документація рушіїв), які не є повноцінними джерелами.
+3. **Порівняння фреймворків розглядають Flutter як «чорну скриньку».** У [26]–[28] міряють середній FPS, CPU і пам'ять, без поділу на UI- та raster-потоки й без перцентилів часу кадру.
+4. **Vulkan і OpenGL ES порівнюють переважно на 3D-навантаженнях.** Для 2D UI є хіба що постер [19], а порівнянь з Metal не знайдено.
+5. **Jank досліджують на рівні ОС** ([22], [23]), а не у фреймворках з власним рушієм рендерингу.
 6. **Академічного опису архітектури Flutter бракує**, тому група 1 спирається на загальні роботи про UI-системи.
+7. **Skia як об'єкт дослідження.** Окрім [3], [11] і [10], робіт про Skia як таку не знайдено, а [10] працює з браузерним навантаженням.
+8. **Методологія вимірювань.** Статистично коректне порівняння (повтори, довірчі інтервали, холодний і теплий запуски) береться з [24], а зовнішнє вимірювання лагів з [25]. Обидва джерела не про Flutter, тому методику доведеться адаптувати.
 
 ## 5 джерел, з яких варто почати
 
-1. **[15] Akenine-Möller & Ström, 2008** — вступ у мобільні GPU.
+1. **[18] Akenine-Möller & Ström, 2008** — вступ у мобільні GPU.
 2. **[7] Kilgard & Bolz, 2012** — як GPU малює 2D-шляхи.
-3. **[12] Crawford & O'Boyle, 2018** — шейдери й методологія вимірювань на мобільних GPU.
-4. **[19] Wu et al., D-VSync, 2025** — сучасні означення пропущених кадрів і дизайн експерименту.
-5. **[21] Biørn-Hansen et al., 2019** — найближчий аналог експерименту курсової.
+3. **[13] Crawford & O'Boyle, 2018** — шейдери й методологія вимірювань на мобільних GPU.
+4. **[22] Wu et al., D-VSync, 2025** — сучасні означення пропущених кадрів і дизайн експерименту.
+5. **[26] Biørn-Hansen et al., 2019** — найближчий аналог експерименту курсової.
